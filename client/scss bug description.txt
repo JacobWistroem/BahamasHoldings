@@ -1,0 +1,1 @@
+Go inside src/assets/sass/lbd/_navbars.scss and change line width: calc(100% - $sidebar-width); with width: calc(100% - #{$sidebar-width});.

@@ -1,2 +1,0 @@
-# BahamasHoldings
-Financial dashboard

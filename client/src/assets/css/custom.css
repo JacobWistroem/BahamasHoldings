@@ -1,0 +1,38 @@
+#main-login-content{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    padding: 20px;
+    margin: auto;
+    height: 270px;
+    width: 30%;
+    margin-top: 200px;
+}
+
+#main-login-content > input {
+    margin-bottom: 10px;
+    height: 35px;
+    border-radius: 5px;
+    border: 1px solid #bcc6d0;
+}
+
+#main-login-content > label {
+    font-weight: 500;
+}
+
+#main-login-content > button {
+    margin-top: 10px;
+    background-color: #5eab6e;
+    border-radius: 5px;
+    border: 1px solid #5eab6e;
+    color: white;
+    height: 40px;
+    font-weight: 550;
+}
+
+body{
+    background-color: RGB(246, 246, 246);
+    top: 0;
+}
