@@ -16,8 +16,8 @@ const bcryptjs = require('bcryptjs');
 const app = express();
 
 const secret = 'thisismysecretkeyshhhhhhh';
- //Serve the static files from the React app
-app.use(express.static(path.join(__dirname, 'client/build')));
+//Serve the static files from the React app
+//app.use(express.static(path.join(__dirname, 'client/build')));
 
 //Middelware (security)
 /*
@@ -28,36 +28,39 @@ app.use(limiter);
 */
 //Allows react from port 3000 to send requests
 var corsOptions = {
-    origin: 'http://localhost:3000',
-    credentials:  true
+    origin: 'http://157.245.47.65:80',
+    credentials:  true,
+    "methods": "POST"
   }
 app.use(cors(corsOptions));
 
 //app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
-
 /*
     Authenticates login processes
 */
 app.post('/api/authenticate', (req, res) => {
+    console.log(req.headers);
     const {email, password} = req.body;
     var hostname = os.hostname()
     if(hostname == 'TwizzX'){
         var path = 'C:/Users/Jacob/Documents/bahamas/login.sqlite';
     } else {
-        var path = '/home/bahamas/mydatabase.db';
+        var path = '/home/bahamas/login.sqlite';
     }
         const id_db = new sqlite3.Database(path, (err) =>{
             if(err){
-                console.log('Could not connect to database');
+                console.log('Could not connect to database: ' + err);
             } else {
                 //Query the user email
-                id_db.get(`SELECT * FROM login where email = ?`, [email], (err, row) => {
+                id_db.get(`SELECT * FROM login WHERE email = ?`, [email.toLowerCase()], (err, row) => {
                     if(err){
                         res.status(400).json({state: false, description: 'Invalid input'});
                         return;
                     }
+                    console.log(row)
+                    console.log(bcryptjs.compareSync(password, row.password))
                     if(row){
                         //test password at hashed password
                         //bcryptjs returns true on match
@@ -98,7 +101,7 @@ app.post('/api/register', (req, res) => {
                 console.log('Could not connect to database');
             } else {
                 //insert new user
-                id_db.run(`INSERT INTO login (email, password, salt) VALUES (?, ?, ?)`, [email, bcryptjs.hashSync(password, 11), ""], (err) => {
+                id_db.run(`INSERT INTO login (email, password, salt) VALUES (?, ?, ?)`, [email.toLowerCase(), bcryptjs.hashSync(password, 11), ""], (err) => {
                     if(err){
                         res.status(400).json({state: false, description: 'Invalid input'});
                         id_db.close();
