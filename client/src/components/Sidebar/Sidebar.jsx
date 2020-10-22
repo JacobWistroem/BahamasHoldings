@@ -56,6 +56,7 @@ class Sidebar extends Component {
             null
           )}
         <div className="logo">
+          {/*
           <a
             href="https://www.creative-tim.com?ref=lbd-sidebar"
             className="simple-text logo-mini"
@@ -70,6 +71,8 @@ class Sidebar extends Component {
           >
             Creative Tim
           </a>
+          */}
+          <h5>Bahamas Holding ApS</h5>
         </div>
         <div className="sidebar-wrapper">
           <ul className="nav">

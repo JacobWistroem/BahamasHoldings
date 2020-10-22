@@ -12,7 +12,14 @@ export default class AuthService{
         if (this.loggedIn()) {
             standardheader['Authorization'] = `Bearer ${this.getToken()}`
         }
-        return fetch('http://157.245.47.65/api/authenticate', {
+
+        if(true){
+            var url = 'http://localhost:5000'
+        } else {
+            var url = 'http://157.245.47.65';
+        }
+
+        return fetch(url + '/api/authenticate', {
             method: "POST",
             mode: 'cors',
             'Access-Control-Allow-Origin': "*",

@@ -28,7 +28,7 @@ app.use(limiter);
 */
 //Allows react from port 3000 to send requests
 var corsOptions = {
-    origin: 'http://157.245.47.65:80',
+    origin: (os.hostname() == 'TwizzX') ? 'http://localhost:3000' : 'http://157.245.47.65:80',
     credentials:  true,
     "methods": "POST"
   }
@@ -43,6 +43,10 @@ app.use(bodyParser.json());
 app.post('/api/authenticate', (req, res) => {
     console.log(req.headers);
     const {email, password} = req.body;
+    if(!email || !password){
+        return res.status(200).json({state: false, description: 'Please fill out both fields'});
+    }
+
     var hostname = os.hostname()
     if(hostname == 'TwizzX'){
         var path = 'C:/Users/Jacob/Documents/bahamas/login.sqlite';

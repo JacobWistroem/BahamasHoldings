@@ -33,17 +33,17 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/user",
-    name: "User Profile",
-    icon: "pe-7s-user",
-    component: UserProfile,
+    path: "/transactions",
+    name: "Transaktioner",
+    icon: "pe-7s-note2",
+    component: TableList,
     layout: "/admin"
   },
   {
-    path: "/table",
-    name: "Table List",
-    icon: "pe-7s-note2",
-    component: TableList,
+    path: "/user",
+    name: "Profil",
+    icon: "pe-7s-user",
+    component: UserProfile,
     layout: "/admin"
   },
   {
@@ -73,7 +73,8 @@ const dashboardRoutes = [
     icon: "pe-7s-bell",
     component: Notifications,
     layout: "/admin"
-  },
+  }
+  /*
   {
     upgrade: true,
     path: "/upgrade",
@@ -82,6 +83,7 @@ const dashboardRoutes = [
     component: Upgrade,
     layout: "/admin"
   }
+  */
 ];
 
 export default dashboardRoutes;

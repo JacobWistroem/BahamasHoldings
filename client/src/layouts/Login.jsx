@@ -23,12 +23,13 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.onlogin = this.onlogin.bind(this);
+    this.Submit = this.Submit.bind(this);
+    
     this.Auth = new AuthService();
     this.state = {
       image: image,
       color: "black",
       hasImage: true,
-      fixedClasses: "dropdown show-dropdown open"
     };
   }
 
@@ -41,14 +42,17 @@ class Login extends Component {
   handleHasImage = hasImage => {
     this.setState({ hasImage: hasImage });
   };
-  handleFixedClick = () => {
-    if (this.state.fixedClasses === "dropdown") {
-      this.setState({ fixedClasses: "dropdown show-dropdown open" });
-    } else {
-      this.setState({ fixedClasses: "dropdown" });
-    }
-  };
 
+  componentDidMount(){
+    document.getElementById("username").addEventListener("keydown", this.Submit);
+    document.getElementById("password").addEventListener("keydown", this.Submit);
+  }
+
+  Submit = (e) => {
+    if(e.key === 'Enter'){
+      this.onlogin();
+    }
+  }
 
 
   onlogin = () => {
