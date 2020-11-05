@@ -2,6 +2,17 @@ import { json } from 'body-parser';
 import decode from 'jwt-decode';
 import cookie from 'react-cookies';
 
+
+var debug = false;
+
+
+if(debug){
+    var url = 'http://localhost:5000'
+} else {
+    var url = 'http://157.245.47.65';
+}
+
+
 export default class AuthService{
     login(email, password) {
         //Static header information
@@ -13,13 +24,6 @@ export default class AuthService{
         if (this.loggedIn()) {
             standardheader['Authorization'] = `Bearer ${this.getToken()}`
         }
-
-        if(true){
-            var url = 'http://localhost:5000'
-        } else {
-            var url = 'http://157.245.47.65';
-        }
-
         return fetch(url + '/api/authenticate', {
             method: "POST",
             mode: 'cors',
@@ -58,7 +62,7 @@ export default class AuthService{
             'Authorization': cookie.load('token')
         }
 
-        return fetch('http://localhost:5000' + '/api/signature', {
+        return fetch(url + '/api/signature', {
                 method: "POST",
                 mode: 'cors',
                 'Access-Control-Allow-Origin': "*",
