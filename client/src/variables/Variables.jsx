@@ -20,6 +20,10 @@
 // // // For notifications
 // //
 //
+
+
+
+
 var defaultWidth =
   window.screen.width > 768
     ? (window.screen.width * 1) / 3
@@ -493,35 +497,103 @@ const iconsArray = [
 //
 // Data for Pie Chart
 var dataPie = {
-  labels: ["40%", "20%", "40%"],
-  series: [40, 20, 40]
+  labels: ["60%", "40%"],
+  //series: [60, 40]
+  series: [{value: 60, className: "pieProfit"},{value: 40, className: "pieMissing"}]
 };
+
+var pieOptions = {
+  fillClass: 'ct-fill-donut',
+  donut: true,
+  donutWidth: 40,
+  startAngle: 270,
+  total: 200,
+  showLabel: false,
+  height: 400,
+  label : {
+    html: '<div class="ct-fill-donut-label"></div>',
+},
+};
+
+
 var legendPie = {
-  names: ["Open", "Bounce", "Unsubscribe"],
+  names: ["Gevinst idag", "Manglende Gevinst"],
   types: ["info", "danger", "warning"]
 };
+
+/*
+// Data for Line Chart
+var dataSales = {
+  labels: [
+    "1.dec",
+    "2.dec",
+    "3.dec",
+    "4.dec",
+    "5.dec",
+    "6.dec",
+    "7.dec",
+    "8.dec",
+    "9.dec",
+    "10.dec",
+    "11.dec",
+    "12.dec",
+    "13.dec",
+    "14.dec",
+    "15.dec",
+    "16.dec",
+    "17.dec",
+    "18.dec",
+    "19.dec",
+    "20.dec",
+    "21.dec",
+    "22.dec",
+    "23.dec",
+    "24.dec",
+    "25.dec",
+    "26.dec",
+    "27.dec",
+    "28.dec",
+    "29.dec",
+    "30.dec",
+    "31.dec"
+  ],
+  series: [
+    [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000,19000,80000,95000,25000,35000],
+    [67, 152, 143, 240, 287, 335, 435, 437,437,437],
+    [150, 155, 160, 108, 190, 239, 307, 800,800,1000]
+  ]
+};
+*/
 
 // Data for Line Chart
 var dataSales = {
   labels: [
-    "9:00AM",
-    "12:00AM",
-    "3:00PM",
-    "6:00PM",
-    "9:00PM",
-    "12:00PM",
-    "3:00AM",
-    "6:00AM"
+    "Januar",
+    "Februar",
+    "Marts",
+    "April",
+    "Maj",
+    "Juni",
+    "Juli",
+    "August",
+    "September",
+    "Oktober",
+    "November",
+    "December"
   ],
   series: [
-    [287, 385, 490, 492, 554, 586, 698, 695],
-    [67, 152, 143, 240, 287, 335, 435, 437],
-    [150, 155, 160, 108, 190, 239, 307, 308]
+    [50000, 55000, 75000, 65000, 70000, 90000, 105000, 115000, 135000, 130000, 125000, 140000],
+    [50000, 55000, 60000, 65000, 70000, 75000, 80000, 85000, 90000, 95000, 100000, 105000],
+    //[150, 155, 160, 108, 190, 239, 307, 800,800,1000]
+    
+    
   ]
 };
+
+
 var optionsSales = {
-  low: 0,
-  high: 800,
+  //low: 0,
+  //high: 100000,
   showArea: false,
   height: "245px",
   axisX: {
@@ -548,7 +620,7 @@ var responsiveSales = [
   ]
 ];
 var legendSales = {
-  names: ["Open", "Click", "Click Second Time"],
+  names: ["Depot værdi", "Planlagt vækst"],
   types: ["info", "danger", "warning"]
 };
 
@@ -573,6 +645,7 @@ var dataBar = {
     [412, 243, 280, 580, 453, 353, 300, 364, 368, 410, 636, 695]
   ]
 };
+
 var optionsBar = {
   seriesBarDistance: 10,
   axisX: {
@@ -604,6 +677,7 @@ module.exports = {
   tdArray, // For tables (TableList view)
   iconsArray, // For icons (Icons view)
   dataPie,
+  pieOptions,
   legendPie,
   dataSales,
   optionsSales,

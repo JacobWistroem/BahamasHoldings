@@ -15,7 +15,7 @@ const bcryptjs = require('bcryptjs');
 
 const app = express();
 
-const secret = 'thisismysecretkeyshhhhhhh';
+const secret = 'thisismysecretskeysshhhhhhh';
 //Serve the static files from the React app
 //app.use(express.static(path.join(__dirname, 'client/build')));
 
@@ -64,8 +64,9 @@ app.post('/api/authenticate', (req, res) => {
                         return;
                     }
                     console.log(row)
-                    console.log(bcryptjs.compareSync(password, row.password))
+                    
                     if(row){
+                        console.log(bcryptjs.compareSync(password, row.password))
                         //test password at hashed password
                         //bcryptjs returns true on match
                         if(bcryptjs.compareSync(password, row.password)){
@@ -118,6 +119,40 @@ app.post('/api/register', (req, res) => {
                 });
             }
         })
+});
+
+
+ //An api endpoint that returns a short list of items
+ app.post('/api/signature', (req,res) => {
+    
+    console.log(req.headers.authorization);
+
+    if(req.headers.authorization){
+        token = req.headers.authorization;
+
+        try{
+            var result = jwt.verify(token, secret);
+            var signature = {
+                status: true,
+                description: 'verified'
+            }
+        } catch(err) {
+            console.log(err);
+            var signature =  {
+                status: false,
+                description: err.message
+            }
+        }
+        /*
+        var result = jwt.verify(token, secret, function(err, decoded) {
+            console.log(decoded) // bar
+            console.log(err)
+          });
+*/
+          console.log(signature)
+
+    }
+    res.json(signature);
 });
 
  //An api endpoint that returns a short list of items

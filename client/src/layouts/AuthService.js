@@ -1,3 +1,4 @@
+import { json } from 'body-parser';
 import decode from 'jwt-decode';
 import cookie from 'react-cookies';
 
@@ -33,28 +34,120 @@ export default class AuthService{
             .then((response) => {
                     //Cookie is automaticly set with fetch API: on credentials include
                     //verifiy cookie is set
+
                     if(response.state === true){
-                        let token = this.getToken();
-                        if(token){
-                            return Promise.resolve(response);
-                        } else {
-                            return Promise.reject(response);
-                        }                
+                        let token = this.getToken()
+                            console.log(token);
+                            if(token){
+                                return Promise.resolve(response);
+                            } else {
+                                return Promise.reject(response);
+                            }
+                                   
                     } return Promise.reject(response);
+                
             });
     }
 
 
+    verifySignature () {
+
+        let standardheader = {
+            "Accept": "application/json",
+            "Content-Type": "application/json", 
+            'Authorization': cookie.load('token')
+        }
+
+        return fetch('http://localhost:5000' + '/api/signature', {
+                method: "POST",
+                mode: 'cors',
+                'Access-Control-Allow-Origin': "*",
+                'Access-Control-Allow-Headers': '*',
+                credentials: 'include',
+                headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json", 
+                'Authorization': cookie.load('token')
+                },
+            })
+            .then((response) => response.json())
+            .then((response) => {
+                console.log(response);
+                return response;
+            });
+    }
+
     //Gets the token from the LocalStorage
     getToken() {
-        return cookie.load('token')
+        //validate signature from backend
+        if(cookie.load('token') !== undefined){
+            /*
+            const token = await this.verifySignature().then(success  => {
+                console.log(success);
+                return success;
+            }).catch(err => {
+                return undefined;
+            });
+            
+
+            */
+            /*
+            let standardheader = {
+                "Accept": "application/json",
+                "Content-Type": "application/json", 
+                'Authorization': cookie.load('token')
+            }
+
+            await fetch('http://localhost:5000' + '/api/signature', {
+                method: "POST",
+                mode: 'cors',
+                'Access-Control-Allow-Origin': "*",
+                'Access-Control-Allow-Headers': '*',
+                credentials: 'include',
+                headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json", 
+                'Authorization': cookie.load('token')
+                },
+            })
+            .then((response) => response.json())
+            .then((response) => {
+                console.log(response);
+                return response
+            });
+            */
+            /*
+            .then((response) => response.json())
+            .then((response) => {
+                console.log(response);
+
+                if(response.status === true){
+                        return Promise.resolve(cookie.load('token'));
+                            
+                } else {
+                    return Promise.reject(undefined);
+                }
+
+
+            }).catch((err) => {
+                return Promise.reject(undefined);
+            });
+            */
+
+            return cookie.load('token');
+            
+        } else {
+            return undefined;
         }
+    }
     
     //Makes sure that the user is logged in
     //!! makes a value to true/false dependent on the value
     //First verifiy we have a token and then check the date
     loggedIn() {
-        const token = this.getToken();
+        const token = this.getToken()
+            console.log(token);
+            return token;
         return !!token && !this.isTokenExpired(token)
     }
 

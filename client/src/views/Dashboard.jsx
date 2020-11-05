@@ -17,6 +17,7 @@
 */
 import React, { Component } from "react";
 import ChartistGraph from "react-chartist";
+import fillDonut from 'chartist-plugin-fill-donut';
 import { Grid, Row, Col } from "react-bootstrap";
 
 import { Card } from "components/Card/Card.jsx";
@@ -24,6 +25,7 @@ import { StatsCard } from "components/StatsCard/StatsCard.jsx";
 import { Tasks } from "components/Tasks/Tasks.jsx";
 import {
   dataPie,
+  pieOptions,
   legendPie,
   dataSales,
   optionsSales,
@@ -47,6 +49,23 @@ class Dashboard extends Component {
     return legend;
   }
   render() {
+    
+    /*
+    let donutOptions = {
+    plugins: [
+      fillDonut({
+        items: [{
+            content: '<i class="fa fa-tachometer"></i>',
+            position: 'bottom',
+            offsetY: 10,
+            offsetX: 0
+        }, {
+            content: '<h3>160<span class="small">mph</span></h3>'
+        }]
+    })
+    ]
+};
+*/ 
     return (
       <div className="content">
         <Grid fluid>
@@ -54,8 +73,8 @@ class Dashboard extends Component {
             <Col lg={3} sm={6}>
               <StatsCard
                 bigIcon={<i className="pe-7s-server text-warning" />}
-                statsText="Capacity"
-                statsValue="105GB"
+                statsText="Månedlig præsentation"
+                statsValue="11.254kr"
                 statsIcon={<i className="fa fa-refresh" />}
                 statsIconText="Updated now"
               />
@@ -63,28 +82,28 @@ class Dashboard extends Component {
             <Col lg={3} sm={6}>
               <StatsCard
                 bigIcon={<i className="pe-7s-wallet text-success" />}
-                statsText="Revenue"
-                statsValue="$1,345"
+                statsText="Total Profit"
+                statsValue="42.351kr"
                 statsIcon={<i className="fa fa-calendar-o" />}
                 statsIconText="Last day"
               />
             </Col>
             <Col lg={3} sm={6}>
               <StatsCard
-                bigIcon={<i className="pe-7s-graph1 text-danger" />}
-                statsText="Errors"
-                statsValue="23"
-                statsIcon={<i className="fa fa-clock-o" />}
-                statsIconText="In the last hour"
+                bigIcon={<i className="fa fa-twitter text-info" />}
+                statsText="Indkudt kapital"
+                statsValue="55.000kr"
+                statsIcon={<i className="fa fa-refresh" />}
+                statsIconText="Updated now"
               />
             </Col>
             <Col lg={3} sm={6}>
               <StatsCard
-                bigIcon={<i className="fa fa-twitter text-info" />}
-                statsText="Followers"
-                statsValue="+45"
-                statsIcon={<i className="fa fa-refresh" />}
-                statsIconText="Updated now"
+                bigIcon={<i className="pe-7s-graph1 text-danger" />}
+                statsText="Depot Værdi"
+                statsValue="97.351kr"
+                statsIcon={<i className="fa fa-clock-o" />}
+                statsIconText="In the last hour"
               />
             </Col>
           </Row>
@@ -92,10 +111,10 @@ class Dashboard extends Component {
             <Col md={8}>
               <Card
                 statsIcon="fa fa-history"
-                id="chartHours"
-                title="Users Behavior"
-                category="24 Hours performance"
-                stats="Updated 3 minutes ago"
+                id="chartYearly"
+                title=""
+                category="Årlig præsentation - 2020"
+                stats="Sidst opdateret: ..."
                 content={
                   <div className="ct-chart">
                     <ChartistGraph
@@ -111,25 +130,31 @@ class Dashboard extends Component {
                 }
               />
             </Col>
+            
             <Col md={4}>
               <Card
                 statsIcon="fa fa-clock-o"
-                title="Email Statistics"
-                category="Last Campaign Performance"
-                stats="Campaign sent 2 days ago"
+                title="Daglig Præsentation"
+                //category="Last Campaign Performance"
+                //stats="Campaign sent 2 days ago"
                 content={
                   <div
                     id="chartPreferences"
-                    className="ct-chart ct-perfect-fourth"
+                    className="ct-chart ct-minor-third"
                   >
-                    <ChartistGraph data={dataPie} type="Pie" />
+                    <ChartistGraph 
+                    data={dataPie} 
+                    type="Pie" 
+                    options={pieOptions} />
                   </div>
                 }
                 legend={
                   <div className="legend">{this.createLegend(legendPie)}</div>
                 }
               />
+              <div className="pieText"><h3>1.540kr</h3><h3> / </h3><h3>5.000kr</h3></div>
             </Col>
+              
           </Row>
 
           <Row>

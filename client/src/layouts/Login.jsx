@@ -60,7 +60,7 @@ class Login extends Component {
     const pass = document.getElementById("password").value;
     this.Auth.login(user, pass)
       .then(res => {
-        this.props.history.push('/admin');
+        this.props.history.push('/admin/dashboard');
       }).catch(err =>{
         this.props.history.push('/login');
           alert(err.description);
@@ -71,13 +71,18 @@ class Login extends Component {
 
   render() {
     return (
-      <div id="main-login-content" className="form-group">
-        
-          <label>Brugernavn:</label>
-          <input id="username" type="text"/>
-          <label>Kodeord:</label>
-          <input id="password" type="password"/>
-          <button onClick={this.onlogin}>Login</button>
+      <div>
+        <div id="logo">
+          <h1>Bahamas Holding ApS</h1>
+        </div>
+
+        <div id="main-login-content" className="form-group">
+            <label>Brugernavn:</label>
+            <input id="username" type="text"/>
+            <label>Kodeord:</label>
+            <input id="password" type="password"/>
+            <button onClick={this.onlogin}>Login</button>
+        </div>
       </div>
     );
   }

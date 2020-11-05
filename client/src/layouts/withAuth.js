@@ -18,12 +18,29 @@ export default function withAuth(AuthComponent) {
                 this.props.history.replace('/login')
             else {
                 try {
+                    const signature = Auth.verifySignature().then(token => {
+                        
+                        console.log(token.status)
+                        if(token.status !== true){
+                            throw "Invalid signature";
+                            
+                        }
+                    }).catch(err => {
+                        console.log(err)
+                        Auth.logout();
+                        console.log(err);
+                        this.props.history.replace('/login')
+
+                    });
+
+
                     const profile = Auth.getProfile();
                     this.setState({ user: profile })
                 }
                 //If we cant decode the token, remove token from LocalStorage and redirect to login page
                 catch (err) {
                     Auth.logout();
+                    console.log(err);
                     this.props.history.replace('/login')
                 }
             }
