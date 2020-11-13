@@ -8,6 +8,7 @@
     margin: auto;
     height: 270px;
     width: 30%;
+    max-width: 430px;
 }
 
 #main-login-content > input {
@@ -64,4 +65,31 @@ body{
 }
 .pieText > h3 {
     padding-right: 5px;
+}
+
+.profit{
+    background-color: rgba(55, 191, 89, 1);
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+}
+
+.loss {
+    background-color: 	rgba(212, 70, 70, 1);
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+}
+
+p {
+    font-size: 14px;
+    margin: 0;
+}
+
+.fa-times{
+    color: rgba(212, 70, 70, 1);
+}
+
+.reset-trans{
+    margin-left: 10px;
 }

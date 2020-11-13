@@ -3,7 +3,7 @@ import decode from 'jwt-decode';
 import cookie from 'react-cookies';
 
 
-var debug = false;
+var debug = true;
 
 
 if(debug){

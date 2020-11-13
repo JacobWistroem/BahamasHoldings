@@ -21,16 +21,202 @@ import { FormInputs } from "components/FormInputs/FormInputs.jsx";
 import Card from "components/Card/Card.jsx";
 import { thArray, tdArray } from "variables/Variables.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
-
+import AuthService from '../layouts/AuthService';
 class TableList extends Component {
-  constructor(){
+  constructor(props){
     super();
+    this.Auth = new AuthService();
+    this.state = {
+      transactions: [],
+      debug: true
+    }
+  
     this.calculateFieldsTrigger = this.calculateFieldsTrigger.bind(this);
     this.calculateFields = this.calculateFields.bind(this);
+    this.loadTransactions = this.loadTransactions.bind(this);
+    this.mycurrentdate = this.mycurrentdate.bind(this);
+    
   }
+
+
 
 componentDidMount(){
   this.calculateFieldsTrigger();
+  this.loadTransactions();
+}
+
+
+
+loadTransactions = () => {
+  let debug = this.state.debug;
+  if(debug){
+      var url = 'http://localhost:5000'
+  } else {
+      var url = 'http://157.245.47.65';
+  }
+
+    //Static header information
+    let standardheader = {
+      "Accept": "application/json",
+      "Content-Type": "application/json", 
+    }
+
+    if (this.Auth.loggedIn()) {
+      standardheader['Authorization'] = `${this.Auth.getToken()}`
+  }
+  
+  return fetch(url + '/api/transactions', {
+    method: "GET",
+    mode: 'cors',
+    'Access-Control-Allow-Origin': "*",
+    'Access-Control-Allow-Headers': '*',
+    headers: standardheader,
+    credentials: 'include',
+  })
+    .then((response) => response.json())
+    .then((response) => {
+            if(response.state === true){
+                this.setState({transactions: response.data})
+            } else {
+              return false;
+            }
+    });
+
+
+}
+
+
+deleteTransaction = (e) => {
+  //delete transaction to API
+  const focusid = e.currentTarget.dataset.id
+  const focusrow = parseInt(e.currentTarget.dataset.ids) + 1;
+
+  var d = window.confirm("Vil du slette transaktion nr. " + focusrow + "?");
+  if (d == true){
+
+  //Start fetch setup
+  let debug = this.state.debug;
+  if(debug){
+      var url = 'http://localhost:5000'
+  } else {
+      var url = 'http://157.245.47.65';
+  }
+
+    //Static header information
+    let standardheader = {
+      "Accept": "application/json",
+      "Content-Type": "application/json", 
+    }
+
+    if (this.Auth.loggedIn()) {
+      standardheader['Authorization'] = `${this.Auth.getToken()}`
+  }
+  
+  return fetch(url + '/api/transaction_del', {
+    method: "POST",
+    mode: 'cors',
+    'Access-Control-Allow-Origin': "*",
+    'Access-Control-Allow-Headers': '*',
+    headers: standardheader,
+    credentials: 'include',
+    body: JSON.stringify({id: focusid})
+  })
+    .then((response) => response.json())
+    .then((response) => {
+            if(response.state === true){
+                //Display SUCCESS notification && reload transactions
+                this.loadTransactions();
+            } else {
+              //Display ERROR notification
+            }
+    });
+  }
+
+}
+
+
+resetTransactionFields = () => {
+  document.getElementById("instrument_field").value = "";
+  document.getElementById("action_field").value = "";
+  document.getElementById("stake_field").value = "";
+  document.getElementById("unit_field").value = "";
+  document.getElementById("currency_field").value = "";
+  document.getElementById("open_field").value = "";
+  document.getElementById("close_field").value = "";
+  document.getElementById("points").value = "";
+  document.getElementById("pl_value").value = "";
+  document.getElementById("pl_percent").value = "";
+  document.getElementById("date_field").value = this.mycurrentdate();
+}
+
+addTransaction = () => {
+  //add transaction to API
+  var data = {
+    instrument: document.getElementById("instrument_field").value,
+    action: document.getElementById("action_field").value,
+    stake_size_percent: document.getElementById("stake_field").value,
+    unit_value: document.getElementById("unit_field").value,
+    currency: document.getElementById("currency_field").value,
+    created_by_user: document.getElementById("user_field").value,
+    open: document.getElementById("open_field").value,
+    close: document.getElementById("close_field").value,
+    points: document.getElementById("points").value,
+    profit_loss: document.getElementById("pl_value").value,
+    pl_percent: document.getElementById("pl_percent").value,
+    date: document.getElementById("date_field").value
+  }
+
+  try{
+  const values = Object.entries(data);
+  for (const [key, value] of values){
+    if(value === undefined || value === ""){
+      throw "could not resolve value: " + key;
+    }
+  }
+
+  //Start fetch setup
+  let debug = this.state.debug;
+  if(debug){
+      var url = 'http://localhost:5000'
+  } else {
+      var url = 'http://157.245.47.65';
+  }
+
+    //Static header information
+    let standardheader = {
+      "Accept": "application/json",
+      "Content-Type": "application/json", 
+    }
+
+    if (this.Auth.loggedIn()) {
+      standardheader['Authorization'] = `${this.Auth.getToken()}`
+  }
+  
+  return fetch(url + '/api/transactions', {
+    method: "POST",
+    mode: 'cors',
+    'Access-Control-Allow-Origin': "*",
+    'Access-Control-Allow-Headers': '*',
+    headers: standardheader,
+    credentials: 'include',
+    body: JSON.stringify(data)
+  })
+    .then((response) => response.json())
+    .then((response) => {
+            if(response.state === true){
+                //Display SUCCESS notification && reload transactions
+                this.loadTransactions();
+            } else {
+              //Display ERROR notification
+            }
+    });
+
+
+
+} catch (err){
+  console.log(err);
+} 
+
 }
 
 calculateFieldsTrigger = () => {
@@ -99,15 +285,21 @@ console.log("LOL")
 
 }
 
+mycurrentdate = () => {
+  let today = new Date().toLocaleDateString('en-GB');
+  let time = new Date().toLocaleTimeString('en-GB');
+  const ourdate = today + " " + time;
+  return ourdate;
+}
+
   render() {
 
     function mycurrentdate() {
-      let today = new Date().toLocaleDateString('en-GB')
-      return today;
+      let today = new Date().toLocaleDateString('en-GB');
+      let time = new Date().toLocaleTimeString('en-GB');
+      const ourdate = today + " " + time;
+      return ourdate;
     }
-
-    
-
 
     return (
       <div className="content">
@@ -127,7 +319,8 @@ console.log("LOL")
                           bsClass: "form-control",
                           placeholder: "Instrument",
                           defaultValue: "",
-                          disabled: false
+                          disabled: false,
+                          id: "instrument_field"
                         },
                         {
                           label: "Action (BUY/SELL)",
@@ -135,28 +328,32 @@ console.log("LOL")
                           bsClass: "form-control",
                           placeholder: "BUY/SELL",
                           defaultValue: "",
-                          className: "autofill"
+                          className: "autofill",
+                          id: "action_field"
                         },
                         {
                           label: "Stake Size (%)",
                           type: "number",
                           bsClass: "form-control",
                           placeholder: "Stake Size",
-                          className: "autofill"
+                          className: "autofill",
+                          id: "stake_field"
                         },
                         {
                           label: "Unit Value",
                           type: "number",
                           bsClass: "form-control",
                           placeholder: "Unit Value",
-                          className: "autofill"
+                          className: "autofill",
+                          id: "unit_field"
                         },
                         {
                           label: "Currency",
                           type: "text",
                           bsClass: "form-control",
                           placeholder: "Currency",
-                          defaultValue: "DKK"
+                          defaultValue: "DKK",
+                          id: "currency_field"
                         },
                         {
                           label: "User",
@@ -164,7 +361,8 @@ console.log("LOL")
                           bsClass: "form-control",
                           placeholder: "Name",
                           defaultValue: "Jacob Wistrøm",
-                          disabled: true
+                          disabled: true,
+                          id: "user_field"
                         }
                       ]}
                     />
@@ -177,7 +375,8 @@ console.log("LOL")
                           bsClass: "form-control",
                           placeholder: "Open",
                           defaultValue: "",
-                          className: "autofill"
+                          className: "autofill",
+                          id: "open_field"
                         },
                         {
                           label: "Close",
@@ -185,7 +384,8 @@ console.log("LOL")
                           bsClass: "form-control",
                           placeholder: "Close",
                           defaultValue: "",
-                          className: "autofill"
+                          className: "autofill",
+                          id: "close_field"
                         },
                         {
                           label: "Points +/-",
@@ -194,7 +394,7 @@ console.log("LOL")
                           placeholder: "Points",
                           defaultValue: "",
                           disabled: true,
-                          id: "points"
+                          id: "points",
                         },
                         {
                           label: "Profit/Loss",
@@ -203,7 +403,7 @@ console.log("LOL")
                           placeholder: "P/L in value",
                           defaultValue: "",
                           disabled: true,
-                          id: "pl_value"
+                          id: "pl_value",
                         },
                         {
                           label: "P/L 100%",
@@ -220,23 +420,27 @@ console.log("LOL")
                           bsClass: "form-control",
                           placeholder: "DD/MM/YYYY (fx. 31/01/2021)",
                           defaultValue: mycurrentdate(),
-                          disabled: false
+                          disabled: false,
+                          id: "date_field"
                         }
                       ]}
                     />
                     
-                    <Button bsStyle="info" fill type="submit">
+                    <Button bsStyle="info" onClick={this.addTransaction} fill type="button">
                       Tilføj
+                    </Button>
+                    <Button bsStyle="info" resettrans onClick={this.resetTransactionFields} fill type="button">
+                      Nulstil
                     </Button>
                     <div className="clearfix" />
                   </form>
                 }
               />
             </Col>
-            <Col md={12}>
+            <Col md={7}>
               <Card
-                title="Striped Table with Hover"
-                category="Here is a subtitle for this table"
+                title="Transaktioner"
+                category="Registeret transaktioner..."
                 ctTableFullWidth
                 ctTableResponsive
                 content={
@@ -246,15 +450,26 @@ console.log("LOL")
                         {thArray.map((prop, key) => {
                           return <th key={key}>{prop}</th>;
                         })}
+                        <th></th>
                       </tr>
                     </thead>
                     <tbody>
-                      {tdArray.map((prop, key) => {
+                      {this.state.transactions.map((prop, key) => {
                         return (
                           <tr key={key}>
-                            {prop.map((prop, key) => {
-                              return <td key={key}>{prop}</td>;
+                            <td  key={key}>{1+key}</td>
+                            {prop.map((prop, subkey) => {
+                              if(subkey === 0 && prop === "PROFIT"){
+                                return <td  key={subkey}><p className="profit">{prop}</p></td>;
+                              } else if (subkey === 0 && prop === "LOSS") {
+                                return <td key={subkey}><p className="loss">{prop}</p></td>;
+                              } else if(subkey === 13) {
+                                return <td key={subkey}><a href="#" onClick={this.deleteTransaction} data-id={prop} data-ids={key}><i className="fa fa-times fa-2x" aria-hidden="true"></i></a></td>
+                              } else {
+                                return <td key={subkey}><p>{prop}</p></td>;
+                              }
                             })}
+                            
                           </tr>
                         );
                       })}

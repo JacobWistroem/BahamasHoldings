@@ -12,6 +12,9 @@ const os = require('os');
 const bcryptjs = require('bcryptjs');
 
 
+const transactions = require('./src/transactions');
+const signature = require('./src/signature');
+
 
 const app = express();
 
@@ -75,7 +78,7 @@ app.post('/api/authenticate', (req, res) => {
                             //issue token
                             const payload = {email, userid: row.id};
                             const token = jwt.sign(payload, secret, {
-                                expiresIn: '1h'
+                                expiresIn: '24h'
                             });
                             //:Todo httpsonly should be true for production
                             id_db.close();
@@ -122,38 +125,87 @@ app.post('/api/register', (req, res) => {
 });
 
 
+
+
  //An api endpoint that returns a short list of items
  app.post('/api/signature', (req,res) => {
     
     console.log(req.headers.authorization);
 
-    if(req.headers.authorization){
-        token = req.headers.authorization;
+    const token = signature.verifySignature(req.headers.authorization);
+    console.log(token);
+    res.json(token);
 
-        try{
-            var result = jwt.verify(token, secret);
-            var signature = {
-                status: true,
-                description: 'verified'
-            }
-        } catch(err) {
-            console.log(err);
-            var signature =  {
-                status: false,
-                description: err.message
-            }
-        }
-        /*
-        var result = jwt.verify(token, secret, function(err, decoded) {
-            console.log(decoded) // bar
-            console.log(err)
-          });
-*/
-          console.log(signature)
-
-    }
-    res.json(signature);
 });
+
+
+app.post('/api/transaction_new', (req, res) => {
+    //Call Transactions module
+    transactions.create_new(req);
+})
+
+
+app.get('/api/transactions', (req,res) => {
+    //middleware
+    const token = signature.verifySignature(req.headers.authorization);
+    if (token.state === false){
+        res.json(token);
+    }
+    //get transactions
+    var data = transactions.load_transactions().then(function (data){
+        var result = {
+            state: true,
+            data: data
+        }
+        console.log(result);
+        console.log('Transactions has been loaded');
+        res.json(result);
+    }) 
+});
+
+app.post('/api/transactions', (req,res) => {
+    //middleware
+    const token = signature.verifySignature(req.headers.authorization);
+    if (token.state === false){
+        res.json(token);
+        res.end;
+    
+    }
+    //add transaction
+    transactions.add_transaction(req.body).then(function (data){
+        
+        console.log(data);
+        res.json(data);
+    }) 
+});
+
+app.post('/api/transaction_del', (req,res) => {
+    //middleware
+    const token = signature.verifySignature(req.headers.authorization);
+    if (token.state === false){
+        res.json(token);
+        res.end;
+    }
+    //add transaction
+    transactions.delete_transaction(req.body.id).then(function (data){
+        
+        console.log(data);
+        res.json(data);
+    }) 
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  //An api endpoint that returns a short list of items
 app.get('/api/getList', (req,res) => {

@@ -22,14 +22,15 @@ import PropTypes from "prop-types";
 
 class CustomButton extends Component {
   render() {
-    const { fill, simple, pullRight, round, block, ...rest } = this.props;
+    const { fill, simple, pullRight, round, block, resettrans, ...rest } = this.props;
 
     const btnClasses = cx({
       "btn-fill": fill,
       "btn-simple": simple,
       "pull-right": pullRight,
       "btn-block": block,
-      "btn-round": round
+      "btn-round": round,
+      "reset-trans": resettrans
     });
 
     return <Button className={btnClasses} {...rest} />;
@@ -41,7 +42,8 @@ CustomButton.propTypes = {
   simple: PropTypes.bool,
   pullRight: PropTypes.bool,
   block: PropTypes.bool,
-  round: PropTypes.bool
+  round: PropTypes.bool,
+  resettrans: PropTypes.bool
 };
 
 export default CustomButton;

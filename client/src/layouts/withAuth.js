@@ -20,8 +20,8 @@ export default function withAuth(AuthComponent) {
                 try {
                     const signature = Auth.verifySignature().then(token => {
                         
-                        console.log(token.status)
-                        if(token.status !== true){
+                        console.log(token.state)
+                        if(token.state !== true){
                             throw "Invalid signature";
                             
                         }

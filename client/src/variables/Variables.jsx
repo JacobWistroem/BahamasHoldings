@@ -270,14 +270,14 @@ var style = {
 // // // For tables
 // //
 //
-const thArray = ["ID", "Name", "Salary", "Country", "City"];
+const thArray = ["NR.", "Status", "Date", "Instrument", "Action", "Stake Size(%)", "Unit Value", "Currency", "Open", "Close", "Points +/-", "Profit/Loss", "P/L 100%", "User" ];
 const tdArray = [
-  ["1", "Dakota Rice", "$36,738", "Niger", "Oud-Turnhout"],
-  ["2", "Minerva Hooper", "$23,789", "Curaçao", "Sinaai-Waas"],
-  ["3", "Sage Rodriguez", "$56,142", "Netherlands", "Baileux"],
-  ["4", "Philip Chaney", "$38,735", "Korea, South", "Overland Park"],
-  ["5", "Doris Greene", "$63,542", "Malawi", "Feldkirchen in Kärnten"],
-  ["6", "Mason Porter", "$78,615", "Chile", "Gloucester"]
+  ["01/10/2020", "DOW", "SELL", "25%", "80", "DKK", "28022", "28029,1", "-6,6", "-132", "-1,65", "Jacob Wistrøm"],
+  ["01/10/2020", "DOW", "SELL", "25%", "80", "DKK", "28022", "28029,1", "-6,6", "-132", "-1,65", "Jacob Wistrøm"],
+  ["01/10/2020", "DOW", "SELL", "25%", "80", "DKK", "28022", "28029,1", "-6,6", "-132", "-1,65", "Jacob Wistrøm"],
+  ["01/10/2020", "DOW", "SELL", "25%", "80", "DKK", "28022", "28029,1", "-6,6", "-132", "-1,65", "Jacob Wistrøm"],
+  ["01/10/2020", "DOW", "SELL", "25%", "80", "DKK", "28022", "28029,1", "-6,6", "-132", "-1,65", "Jacob Wistrøm"],
+  ["01/10/2020", "DOW", "SELL", "25%", "80", "DKK", "28022", "28029,1", "-6,6", "-132", "-1,65", "Jacob Wistrøm"],
 ];
 
 //
